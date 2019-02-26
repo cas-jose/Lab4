@@ -2,35 +2,57 @@
 clear;
 clc;
 
-k = [0.5, 0.5]; %Start point
+k = [11, 10]; %Start point
 scatter(k(1), k(2),100,'r','filled')
 hold on
 
-side = 3; %length of square grid
+side1 = 24;
+side2 = 18; %lengths of rectangle grid
 
-lineSize = 0.1; %The length of the line connecting nodes
+lineSize = 0.5; %The length of the line connecting nodes
 pointHistory(1,:) = k; %column vector that records all node points
 
 %Obstacles-----------------------------------------------------
 
-x_obs = [1, 1,  1.5, 1.5, 1]; 
-y_obs = [1, 1.5, 1.5, 1, 1];
+x_obs = [8, 10,  10, 8, 8]; 
+y_obs = [18, 18, 12, 12, 18];
 
 plot( x_obs, y_obs, 'b')
+fill(x_obs,y_obs,'b');
 hold on
 
-x_obs2 = [2, 2,  2.3, 2, 2]; 
-y_obs2 = [1, 1.2, 1.2, 1, 1];
+x_obs2 = [12, 14,  14, 12, 12]; 
+y_obs2 = [7, 7, 0, 0, 7];
 
 plot( x_obs2, y_obs2, 'b')
+fill( x_obs2, y_obs2, 'b')
 hold on
 
+x_obs3 = [22, 24,  24, 22, 22]; 
+y_obs3 = [3, 3, 0, 0, 3];
 
+plot( x_obs3, y_obs3, 'b')
+fill( x_obs3, y_obs3, 'b')
+hold on
+
+x_obs4 = [15, 17,  17, 15, 15]; 
+y_obs4 = [18, 18, 15, 15, 18];
+
+plot( x_obs4, y_obs4, 'b')
+fill( x_obs4, y_obs4, 'b')
+hold on
+
+x_obs5 = [22, 24,  24, 22, 22]; 
+y_obs5 = [18, 18, 15, 15, 18];
+
+plot( x_obs5, y_obs5, 'b')
+fill( x_obs5, y_obs5, 'b')
+hold on
 %Creating grid-------------------------------------------------------------------------------
-x_grid = [0 0 side side 0]
-y_grid = [0 side side 0 0]
+x_grid = [0 0 24 24 0]
+y_grid = [0 18 18 0 0]
 plot(x_grid,y_grid, 'b')
-axis([-1 4 -1 4])
+axis([0 24 0 18])
 hold on
 
 %------------------------------------------------------------------------------------------
@@ -38,7 +60,7 @@ hold on
 %Creating the end goal circle------------------------------------------
 x_center = 2;
 y_center = 1.5;
-radius = 0.1;
+radius = 0.5;
 
 
 theta = 0:0.01:2*pi;
@@ -59,8 +81,8 @@ while done == false
     
     if (i == 1) %takes care of first iteration
         
-        q_rx = side*rand(1); % generating a random node with constraints with respect to the grid dimensions
-        q_ry = side*rand(1);
+        q_rx = side1*rand(1); % generating a random node with constraints with respect to the grid dimensions
+        q_ry = side2*rand(1);
         
         q = [q_rx, q_ry]; % placing the (x,y) coordinates of the random node in a vector
         
@@ -95,8 +117,8 @@ while done == false
       Collision = true;
         
         while (Collision == true) %loop that iterates if a new node point is in an obstacle
-            q_rx = side*rand(1); % generating a random node with constraints with respect to the grid dimensions
-            q_ry = side*rand(1);
+            q_rx = side1*rand(1); % generating a random node with constraints with respect to the grid dimensions
+            q_ry = side2*rand(1);
             
             q = [q_rx, q_ry]; % placing the (x,y) coordinates of the random node in a vector
             
@@ -119,7 +141,7 @@ while done == false
             t = v_unit.*lineSize; %scaling the vector with the necessary length "linesize"
             newPoint = pointHistory(b,:) + t; % creates a vector pointing from nearest node to q with length "linesize"
             
-            if (inpolygon(newPoint(1,1),newPoint(1,2),x_obs,y_obs) == false && inpolygon(newPoint(1,1),newPoint(1,2),x_obs2,y_obs2) == false) %conditional statement that checks if a newly created node is inside an obstacle
+            if (inpolygon(newPoint(1,1),newPoint(1,2),x_obs,y_obs) == false && inpolygon(newPoint(1,1),newPoint(1,2),x_obs2,y_obs2) == false && inpolygon(newPoint(1,1),newPoint(1,2),x_obs3,y_obs3) == false && inpolygon(newPoint(1,1),newPoint(1,2),x_obs4,y_obs4) == false && inpolygon(newPoint(1,1),newPoint(1,2),x_obs5,y_obs5) == false) %conditional statement that checks if a newly created node is inside an obstacle
                 Collision = false;
                 x = [pointHistory(b,1) newPoint(1)]; %storing the x coordinates of nearest node and newpoint
                 y = [pointHistory(b,2) newPoint(2)]; %storing the y coordinates of nearest node and newpoint
@@ -156,6 +178,3 @@ while done == false
     
     
 end
-
-
-
